@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static core.YandexSpellerConstants.*;
+import static enums.Options.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
@@ -20,31 +21,33 @@ import static org.hamcrest.Matchers.lessThan;
  */
 public class TestYandexSpellerJSON {
 
+    private String wrongAnswer = "Expected number of answers is wrong.";
+
     // simple usage of RestAssured library: direct request call and response validations in test.
     @Test
     public void simpleSpellerApiCall() {
         RestAssured
                 .given()
-                    .queryParam(PARAM_TEXT, WRONG_WORD_EN)
-                    .params(PARAM_LANG, Languages.EN, "CustomParameter", "valueOfParam")
-                    .accept(ContentType.JSON)
-                    .auth().basic("abcName", "abcPassword")
-                    .header("custom header1", "header1.value")
-                    .and()
-                    .body("some body payroll")
-                    .log().everything()
+                .queryParam(PARAM_TEXT, WRONG_WORD_EN)
+                .params(PARAM_LANG, Languages.EN, "CustomParameter", "valueOfParam")
+                .accept(ContentType.JSON)
+                .auth().basic("abcName", "abcPassword")
+                .header("custom header1", "header1.value")
+                .and()
+                .body("some body payroll")
+                .log().everything()
                 .when()
-                    .get(YANDEX_SPELLER_API_URI)
-                    .prettyPeek()
+                .get(YANDEX_SPELLER_API_URI)
+                .prettyPeek()
                 .then()
 
-                    .assertThat()
-                    .statusCode(HttpStatus.SC_OK)
-                    .body(Matchers.allOf(
-                            Matchers.stringContainsInOrder(Arrays.asList(WRONG_WORD_EN, RIGHT_WORD_EN)),
-                            Matchers.containsString("\"code\":1")))
-                    .contentType(ContentType.JSON)
-                    .time(lessThan(20000L)); // Milliseconds
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .body(Matchers.allOf(
+                        Matchers.stringContainsInOrder(Arrays.asList(WRONG_WORD_EN, RIGHT_WORD_EN)),
+                        Matchers.containsString("\"code\":1")))
+                .contentType(ContentType.JSON)
+                .time(lessThan(20000L)); // Milliseconds
     }
 
     // different http methods calls
@@ -53,35 +56,35 @@ public class TestYandexSpellerJSON {
         //GET
         RestAssured
                 .given()
-                    .param(PARAM_TEXT, WRONG_WORD_EN)
-                    .log().everything()
+                .param(PARAM_TEXT, WRONG_WORD_EN)
+                .log().everything()
                 .get(YANDEX_SPELLER_API_URI)
-                    .prettyPeek();
+                .prettyPeek();
         System.out.println("\n=====================================================================");
 
         //POST
         RestAssured
                 .given()
-                    .param(PARAM_TEXT, WRONG_WORD_EN)
-                    .log().everything()
+                .param(PARAM_TEXT, WRONG_WORD_EN)
+                .log().everything()
                 .post(YANDEX_SPELLER_API_URI)
-                    .prettyPeek();
+                .prettyPeek();
         System.out.println("\n=====================================================================");
 
         //HEAD
         RestAssured
                 .given()
-                    .param(PARAM_TEXT, WRONG_WORD_EN)
-                    .log().everything()
+                .param(PARAM_TEXT, WRONG_WORD_EN)
+                .log().everything()
                 .head(YANDEX_SPELLER_API_URI)
-                    .prettyPeek();
+                .prettyPeek();
         System.out.println("\n=====================================================================");
 
         //OPTIONS
         RestAssured
                 .given()
-                    .param(PARAM_TEXT, WRONG_WORD_EN)
-                    .log().everything()
+                .param(PARAM_TEXT, WRONG_WORD_EN)
+                .log().everything()
                 .options(YANDEX_SPELLER_API_URI)
                 .prettyPeek();
         System.out.println("\n=====================================================================");
@@ -89,32 +92,32 @@ public class TestYandexSpellerJSON {
         //PUT
         RestAssured
                 .given()
-                    .param(PARAM_TEXT, WRONG_WORD_EN)
-                    .log().everything()
+                .param(PARAM_TEXT, WRONG_WORD_EN)
+                .log().everything()
                 .put(YANDEX_SPELLER_API_URI)
-                    .prettyPeek();
+                .prettyPeek();
         System.out.println("\n=====================================================================");
 
         //PATCH
         RestAssured
                 .given()
-                    .param(PARAM_TEXT, WRONG_WORD_EN)
-                    .log()
-                    .everything()
+                .param(PARAM_TEXT, WRONG_WORD_EN)
+                .log()
+                .everything()
                 .patch(YANDEX_SPELLER_API_URI)
-                    .prettyPeek();
+                .prettyPeek();
         System.out.println("\n=====================================================================");
 
         //DELETE
         RestAssured
                 .given()
-                    .param(PARAM_TEXT, WRONG_WORD_EN)
-                    .log()
-                    .everything()
+                .param(PARAM_TEXT, WRONG_WORD_EN)
+                .log()
+                .everything()
                 .delete(YANDEX_SPELLER_API_URI).prettyPeek()
                 .then()
-                    .statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
-                    .statusLine("HTTP/1.1 405 Method not allowed");
+                .statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
+                .statusLine("HTTP/1.1 405 Method not allowed");
     }
 
 
@@ -129,12 +132,11 @@ public class TestYandexSpellerJSON {
     }
 
     @Test
-    public void reachBuilderUsage(){
-                YandexSpellerApi.with()
-                        .language(Languages.UK)
-                        .options("5")
-                        .text(WRONG_WORD_UK)
-                        .callApi()
+    public void reachBuilderUsage() {
+        YandexSpellerApi.with()
+                .language(Languages.RU)
+                .text(WRONG_WORD_UK)
+                .callApi()
                 .then().specification(YandexSpellerApi.successResponse());
     }
 
@@ -145,7 +147,7 @@ public class TestYandexSpellerJSON {
         List<YandexSpellerAnswer> answers =
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with().text("motherr fatherr," + WRONG_WORD_EN).callApi());
-        assertThat("expected number of answers is wrong.", answers.size(), equalTo(3));
+        assertThat(wrongAnswer, answers.size(), equalTo(3));
         assertThat(answers.get(0).word, equalTo("motherr"));
         assertThat(answers.get(1).word, equalTo("fatherr"));
         assertThat(answers.get(0).s.get(0), equalTo("mother"));
@@ -155,26 +157,67 @@ public class TestYandexSpellerJSON {
 
 
     @Test
-    public void optionsValueIgnoreDigits(){
+    public void optionsValueIgnoreDigits() {
         List<YandexSpellerAnswer> answers =
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with().
                                 text(WORD_WITH_LEADING_DIGITS)
-                                .options("2")
+                                .options(IGNORE_DIGITS.code)
                                 .callApi());
-        assertThat("expected number of answers is wrong.", answers.size(), equalTo(0));
+        assertThat(wrongAnswer, answers.size(), equalTo(0));
     }
 
     @Test
-    public void optionsIgnoreWrongCapital(){
+    public void optionsIgnoreWrongCapital() {
         List<YandexSpellerAnswer> answers =
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with().
                                 text(WORD_WITH_WRONG_CAPITAL)
-                                .options("512")
+                                .options(IGNORE_CAPITALIZATION.code)
                                 .callApi());
-        assertThat("expected number of answers is wrong.", answers.size(), equalTo(0));
+        assertThat(wrongAnswer, answers.size(), equalTo(0));
     }
 
+    @Test
+    public void optionsIgnoreEmails() {
+        List<YandexSpellerAnswer> answers =
+                YandexSpellerApi.getYandexSpellerAnswers(
+                        YandexSpellerApi.with()
+                                .text(WORD_EMAIL).language(Languages.EN)
+                                .options(IGNORE_URLS.code)
+                                .callApi()
+                );
+        assertThat(answers.size(), equalTo(0));
+    }
 
+    @Test
+    public void optionsIgnoreCapitalsInNames() {
+        List<YandexSpellerAnswer> answers = YandexSpellerApi.getYandexSpellerAnswers(
+                YandexSpellerApi.with()
+                        .text(WRONG_WORD_NAME).language(Languages.EN)
+                        .options(IGNORE_CAPITALIZATION.code).callApi()
+        );
+        assertThat(answers.size(), equalTo(0));
+    }
+
+    @Test
+    public void findMistakeInName() {//options IGNORE_CAPITALIZATION does not work!!!
+        List<YandexSpellerAnswer> answers = YandexSpellerApi.getYandexSpellerAnswers(
+                YandexSpellerApi.with()
+                        .text(WRONG_WORD_NAME).language(Languages.EN)
+                        .callApi()
+        );
+        assertThat(wrongAnswer, answers.size(), equalTo(0));
+    }
+
+    @Test
+    public void optionsFindingRepeatWords() {//options FIND_REPEAT_WORDS does not work!!!
+        List<YandexSpellerAnswer> answers = YandexSpellerApi.getYandexSpellerAnswers(
+                YandexSpellerApi.with()
+                        .text(REPETITION_WORDS).language(Languages.EN)
+                        .options(FIND_REPEAT_WORDS.code)
+                        .callApi()
+        );
+        assertThat(wrongAnswer, answers.size(), equalTo(0));
+    }
 }

@@ -26,9 +26,18 @@ public class TestYandexSpellerSOAP {
         YandexSpellerSOAP.with()
                 .language(Languages.EN)
                 .text(WRONG_WORD_EN)
-                .options("6")
+                .options("0")
                 .callSOAP()
                 .then()
                 .body(Matchers.stringContainsInOrder(Arrays.asList(WRONG_WORD_EN, RIGHT_WORD_EN)));
+    }
+    @Test
+    public void findingMistakeInName() {
+        YandexSpellerSOAP.with()
+                .text(WRONG_WORD_NAME)
+                .language(Languages.EN)//works with EN only
+                .callSOAP()
+                .then()
+                .body(Matchers.stringContainsInOrder(Arrays.asList(WRONG_WORD_NAME, RIGHT_WORD_NAME)));
     }
 }

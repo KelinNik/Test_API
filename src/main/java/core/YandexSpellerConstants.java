@@ -16,6 +16,10 @@ public class YandexSpellerConstants {
     public static final String WRONG_WORD_UK = "питаня";
     public static final String WORD_WITH_WRONG_CAPITAL = "moscow";
     public static final String WORD_WITH_LEADING_DIGITS = "11" + RIGHT_WORD_EN;
+    public static final String WORD_EMAIL = "max@mail.com";
+    public static final String WRONG_WORD_NAME = "george";
+    public static final String RIGHT_WORD_NAME = "George";
+    public static final String REPETITION_WORDS = "hi hi hi hi";
 
 
     public enum Languages {

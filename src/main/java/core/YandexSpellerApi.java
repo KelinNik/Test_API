@@ -29,7 +29,7 @@ public class YandexSpellerApi {
     //builder pattern
     private YandexSpellerApi() {
     }
-    private HashMap<String, String> params = new HashMap<String, String>();
+    private HashMap<String, String> params = new HashMap<>();
 
     public static class ApiBuilder {
         YandexSpellerApi spellerApi;
@@ -69,7 +69,7 @@ public class YandexSpellerApi {
 
     //get ready Speller answers list form api response
     public static List<YandexSpellerAnswer> getYandexSpellerAnswers(Response response){
-        return new Gson().fromJson( response.asString().trim(), new TypeToken<List<YandexSpellerAnswer>>() {}.getType());
+        return new Gson().fromJson(response.asString().trim(), new TypeToken<List<YandexSpellerAnswer>>() {}.getType());
     }
 
 
